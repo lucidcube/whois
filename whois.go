@@ -12,7 +12,7 @@ import (
 	"github.com/zonedb/zonedb"
 )
 
-func ConvertRecord(result string) map[string]string {
+func splitRecord(result string) map[string]string {
 	res := make(map[string]string)
 	r := regexp.MustCompile(`(?mi:^\s?([\w\s\/]*)\:(.*)$)`)
 	vars := r.FindAllStringSubmatch(result, -1)
@@ -22,6 +22,41 @@ func ConvertRecord(result string) map[string]string {
 		if len(key) > 2 && strings.Count(key, " ") < 5 && len(val) > 0 {
 			res[key] = val
 		}
+	}
+	return res
+}
+
+func ConvertRecord(result string) map[string]string {
+	res := splitRecord(result)
+	r := regexp.MustCompile(`(?ms)^ +([^:]+):(\n|\r\n)(.+?)(\n|\r\n)(\n|\r\n)`)
+	vars := r.FindAllStringSubmatch(result, -1)
+	for _, vals := range vars {
+		resKey := ""
+		resVal := ""
+		for key, val := range vals {
+			if key == 1 {
+				resKey = val
+			} else if key == 3 {
+				tmpVal := regexp.MustCompile(`(?m)^\s*`).ReplaceAllString(val, "")
+
+				partsVal := splitRecord(tmpVal)
+				if len(partsVal) > 0 {
+					for subK, subV := range partsVal {
+						res[subK] = subV
+					}
+					resVal = ""
+				} else {
+					resVal = tmpVal
+				}
+			}
+		}
+
+		resKey = strings.TrimSpace(strings.Trim(strings.Replace(resKey, "\n", "", -1), ":"))
+		resVal = strings.TrimSpace(resVal)
+		if len(resKey) > 2 && strings.Count(resKey, " ") < 5 && len(resVal) > 0 {
+			res[resKey] = resVal
+		}
+
 	}
 	return res
 }
