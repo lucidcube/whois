@@ -70,7 +70,8 @@ func IsAvailable(domain string) (bool, error) {
 }
 
 func IsAvailableFromWhois(domain string, whoisResult string) bool {
-	return strings.Contains(strings.ToUpper(whoisResult), "NO MATCH FOR")
+	uppercaseResult := strings.ToUpper(whoisResult)
+	return strings.Contains(uppercaseResult, "NO MATCH FOR") || strings.Contains(uppercaseResult, "DOMAIN NOT FOUND")
 }
 
 func GetRecord(domain string) (string, error) {
