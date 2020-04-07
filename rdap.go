@@ -18,8 +18,13 @@ type rdapBootstrap struct {
 }
 
 var (
-	rdapDns = map[string][]string{}
+	rdapDns    = map[string][]string{}
+	rdapClient = &http.Client{}
 )
+
+func SetRdapClient(client http.Client) {
+	rdapClient = &client
+}
 
 func RefreshMap() {
 	response, err := http.Get("http://data.iana.org/rdap/dns.json")
@@ -51,7 +56,7 @@ func IsAvailableFromRdap(domain string) (bool, error) {
 			service := services[0]
 			services = services[1:]
 
-			response, err := http.Get(service + "domain/" + domain)
+			response, err := rdapClient.Get(service + "domain/" + domain)
 			if err == nil {
 				if response.StatusCode == 404 {
 					return true, nil

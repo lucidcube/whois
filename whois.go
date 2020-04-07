@@ -62,7 +62,7 @@ func ConvertRecord(result string) map[string]string {
 }
 
 func IsAvailableFromWhois(domain string) (bool, error) {
-	whoisResult, err := GetRecordWithTimeout(domain, 5*time.Second)
+	whoisResult, err := GetRecord(domain)
 	if err != nil {
 		return false, err
 	}
@@ -72,7 +72,7 @@ func IsAvailableFromWhois(domain string) (bool, error) {
 }
 
 func GetRecord(domain string) (string, error) {
-	return GetRecordWithTimeout(domain, 5*time.Second)
+	return GetRecordWithTimeout(domain, whoisTimeout)
 }
 
 func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) {
