@@ -5,8 +5,10 @@ import (
 	"testing"
 )
 
-func TestWhois(t *testing.T) {
-	result, err := whois.IsAvailableFromWhois("test.invalid")
+func Test(t *testing.T) {
+	whois.RefreshMap()
+
+	result, err := whois.IsAvailable("test.invalid")
 	if err == nil {
 		t.Errorf("invalid domain returned no error")
 	} else if err.Error() != "no public zone found for test.invalid" {
@@ -16,17 +18,17 @@ func TestWhois(t *testing.T) {
 		t.Errorf("invalid domain returned true; should be false")
 	}
 
-	result, err = whois.IsAvailableFromWhois("test.com")
+	result, err = whois.IsAvailable("test.com")
 	if err != nil {
-		t.Errorf("taken domain returned an error %s", err)
+		t.Errorf("taken domain returned an error %s", err.Error())
 	}
 	if result == true {
 		t.Errorf("taken domain returned true; should be false")
 	}
 
-	result, err = whois.IsAvailableFromWhois("available-lucidcube.com")
+	result, err = whois.IsAvailable("available-lucidcube.com")
 	if err != nil {
-		t.Errorf("available domain returned an error %s", err)
+		t.Errorf("available domain returned an error %s", err.Error())
 	}
 	if result == false {
 		t.Errorf("available domain returned false; should be true")

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"log"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -52,12 +51,11 @@ func IsAvailableFromRdap(domain string) (bool, error) {
 			service := services[0]
 			services = services[1:]
 
-			response, err := http.Get(service + "/domain/" + domain)
+			response, err := http.Get(service + "domain/" + domain)
 			if err == nil {
 				if response.StatusCode == 404 {
 					return true, nil
 				}
-				log.Print(domain, " ", response.StatusCode)
 				if response.StatusCode == 200 {
 					return false, nil
 				}
