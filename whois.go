@@ -61,17 +61,14 @@ func ConvertRecord(result string) map[string]string {
 	return res
 }
 
-func IsAvailable(domain string) (bool, error) {
-	result, err := GetRecord(domain)
+func IsAvailableFromWhois(domain string) (bool, error) {
+	whoisResult, err := GetRecordWithTimeout(domain, 5*time.Second)
 	if err != nil {
-		return true, err
+		return false, err
 	}
-	return IsAvailableFromWhois(domain, result), nil
-}
 
-func IsAvailableFromWhois(domain string, whoisResult string) bool {
 	uppercaseResult := strings.ToUpper(whoisResult)
-	return strings.Contains(uppercaseResult, "NO MATCH FOR") || strings.Contains(uppercaseResult, "DOMAIN NOT FOUND")
+	return strings.Contains(uppercaseResult, "NO MATCH FOR") || strings.Contains(uppercaseResult, "DOMAIN NOT FOUND"), nil
 }
 
 func GetRecord(domain string) (string, error) {
@@ -79,7 +76,6 @@ func GetRecord(domain string) (string, error) {
 }
 
 func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) {
-
 	server, err := getServer(domain)
 	if err != nil {
 		return "", err
@@ -88,7 +84,6 @@ func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) 
 	primaryWhois, err := getWhoisResult(server, domain, timeout)
 
 	if strings.Contains(primaryWhois, "To single out one record") {
-
 		primaryWhois, err = getWhoisResult(server, "="+domain, timeout)
 	}
 
@@ -111,7 +106,6 @@ func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) 
 	}
 
 	return fullWhois, nil
-
 }
 
 func getWhoisResult(server string, domain string, timeout time.Duration) (string, error) {
