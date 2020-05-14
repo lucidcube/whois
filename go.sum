@@ -4,6 +4,8 @@ github.com/miekg/dns v1.1.29/go.mod h1:KNUDUusw/aVsxyTYZM1oqvCicbwhgbNgztCETuNZ7
 github.com/wsxiaoys/terminal v0.0.0-20160513160801-0940f3fc43a0/go.mod h1:IXCdmsXIht47RaVFLEdVnh1t+pgYtTAhQGj73kz+2DM=
 github.com/zonedb/zonedb v1.0.2641 h1:m9omAmaMqdmPI/sc8s1+/gz/dEusyzslJ3Mr0fS4lLM=
 github.com/zonedb/zonedb v1.0.2641/go.mod h1:0sNeQCB5BUCvkKDJQbDhQdzuUlbKgPaUMGRA6dcZX3Q=
+github.com/zonedb/zonedb v1.0.2680 h1:4ncLd1vtZgCGx7UtUFfObdmHRye84JtMcjlAZ3CPooA=
+github.com/zonedb/zonedb v1.0.2680/go.mod h1:0sNeQCB5BUCvkKDJQbDhQdzuUlbKgPaUMGRA6dcZX3Q=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
 golang.org/x/mod v0.1.1-0.20191105210325-c90efee705ee/go.mod h1:QqPTAvyqsEbceGzBzNggFXnrqF1CaUcvgkdR5Ot7KZg=

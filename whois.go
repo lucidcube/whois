@@ -1,8 +1,10 @@
 package whois
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/url"
 	"regexp"
@@ -68,7 +70,30 @@ func IsAvailableFromWhois(domain string) (bool, error) {
 	}
 
 	uppercaseResult := strings.ToUpper(whoisResult)
-	return strings.Contains(uppercaseResult, "NO MATCH FOR") || strings.Contains(uppercaseResult, "DOMAIN NOT FOUND"), nil
+
+	if strings.Contains(uppercaseResult, "NOT AUTHORISED") ||
+		strings.Contains(uppercaseResult, "NOT PERMITTED") {
+		return false, errors.New("not authorized to use this service")
+	}
+
+	matched := uppercaseResult == "" ||
+		strings.Contains(uppercaseResult, "NO MATCH") ||
+		strings.Contains(uppercaseResult, "NO ENTRIES") ||
+		strings.Contains(uppercaseResult, "NO FOUND") ||
+		strings.Contains(uppercaseResult, "OBJECT_NOT_FOUND") ||
+		strings.Contains(uppercaseResult, "NO DATA FOUND") ||
+		strings.Contains(uppercaseResult, "NO OBJECT FOUND") ||
+		strings.Contains(uppercaseResult, "OBJECT DOES NOT EXIST") ||
+		strings.Contains(uppercaseResult, "AVAILABLE FOR PURCHASE") ||
+		strings.Contains(uppercaseResult, "NOT FOUND") ||
+		strings.Contains(uppercaseResult, "NOT REGISTERED") ||
+		strings.Contains(uppercaseResult, "IS FREE") ||
+		strings.Contains(uppercaseResult, "NOTHING FOUND")
+
+	if !matched {
+		matched, _ = regexp.MatchString("STATUS:\\s+(AVAILABLE|FREE)", uppercaseResult)
+	}
+	return matched, nil
 }
 
 func GetRecord(domain string) (string, error) {
@@ -80,11 +105,16 @@ func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) 
 	if err != nil {
 		return "", err
 	}
-
 	primaryWhois, err := getWhoisResult(server, domain, timeout)
+	if err != nil {
+		return "", err
+	}
 
 	if strings.Contains(primaryWhois, "To single out one record") {
 		primaryWhois, err = getWhoisResult(server, "="+domain, timeout)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	r := regexp.MustCompile(`Whois Server: (.*)`)
@@ -104,6 +134,7 @@ func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) 
 			}
 		}
 	}
+	log.Print(domain, " --- ", fullWhois)
 
 	return fullWhois, nil
 }
