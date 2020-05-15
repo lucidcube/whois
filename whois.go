@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net"
 	"net/url"
 	"regexp"
@@ -135,7 +134,6 @@ func GetRecordWithTimeout(domain string, timeout time.Duration) (string, error) 
 			}
 		}
 	}
-	log.Print(domain, " --- ", fullWhois)
 
 	return fullWhois, nil
 }
