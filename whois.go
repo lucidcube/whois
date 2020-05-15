@@ -85,6 +85,7 @@ func IsAvailableFromWhois(domain string) (bool, error) {
 		strings.Contains(uppercaseResult, "NO OBJECT FOUND") ||
 		strings.Contains(uppercaseResult, "OBJECT DOES NOT EXIST") ||
 		strings.Contains(uppercaseResult, "AVAILABLE FOR PURCHASE") ||
+		strings.Contains(uppercaseResult, "220 AVAILABLE") ||
 		strings.Contains(uppercaseResult, "NOT FOUND") ||
 		strings.Contains(uppercaseResult, "NOT REGISTERED") ||
 		strings.Contains(uppercaseResult, "IS FREE") ||

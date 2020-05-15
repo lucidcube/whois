@@ -4,7 +4,6 @@ import (
 	"github.com/lucidcube/whois"
 	"strings"
 	"testing"
-	"time"
 )
 
 var tests = []struct {
@@ -129,8 +128,6 @@ var tests = []struct {
 }
 
 func TestWhois(t *testing.T) {
-	whois.SetTimeout(time.Millisecond * 500)
-
 	t.Parallel()
 	for _, tt := range tests {
 		tst := tt
