@@ -22,8 +22,12 @@ var (
 	rdapClient = &http.Client{}
 )
 
-func SetRdapClient(client http.Client) {
-	rdapClient = &client
+func GetRdapClient() *http.Client {
+	return rdapClient
+}
+
+func SetRdapClient(client *http.Client) {
+	rdapClient = client
 }
 
 func RefreshMap() {
